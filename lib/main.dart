@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_proj/router/project_router.dart';
+import 'package:jk_event_management/router/project_router.dart';
 
 import 'firebase/firebase_options.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Our Project',
       debugShowCheckedModeBanner: false,
-      initialRoute: ProjectRouter.SA_LOGIN_SCREEN,
+      initialRoute: ProjectRouter.SA_HOME_SCREEN,
       getPages: ProjectRouter.routes,
     );
   }

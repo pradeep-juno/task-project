@@ -21,18 +21,75 @@ class SaLoginController extends GetxController {
       String password = passwordController.text.trim().toString();
 
       try {
-        await isCheckedSaAdminData(context, mobileNumber, password);
+        bool isSuperAdmin =
+            await isCheckedSaAdminData(context, mobileNumber, password);
+        if (isSuperAdmin) return;
+
+        // Check for Staff login if Super Admin login fails
+        bool isStaff =
+            await isCheckedStaffLoginData(mobileNumber, password, context);
+
+        if (!isStaff) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Invalid Credentials 18 '),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.blue,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        /*ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Something went Wrong '),
             duration: Duration(seconds: 2),
             backgroundColor: Colors.blue,
             behavior: SnackBarBehavior.floating,
           ),
-        );
+        );*/
+
+        print("Error during login: $e");
       }
     }
+  }
+
+  //--------------------------This is for Staff Login -------------------------
+  Future<bool> isCheckedStaffLoginData(
+      String mobileNumber, String password, BuildContext context) async {
+    print("StaffAdminLogin");
+
+    QuerySnapshot staffSnapshot = await FirebaseFirestore.instance
+        .collection(ProjectConstants.collectionStaff)
+        .where('staffMobileNumber', isEqualTo: mobileNumber)
+        .where('staffPassword', isEqualTo: password)
+        .get();
+
+    if (staffSnapshot.docs.isNotEmpty) {
+      var staffData = staffSnapshot.docs.first;
+      String staffName = staffData['staffName'];
+      String staffId = staffData['staffId'];
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Welcome $staffName'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.blue,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('staffId', staffId);
+
+      getSaAdminDataDetailsFromPreference();
+
+      clearController(context);
+      Get.offNamed(ProjectRouter.STAFF_HOME_SCREEN);
+
+      return true;
+    }
+    return false;
   }
 
   validateFields(BuildContext context) async {
@@ -79,6 +136,8 @@ class SaLoginController extends GetxController {
 
   isCheckedSaAdminData(
       BuildContext context, String mobileNumber, String password) async {
+    print("SuperAdminLogin");
+
     DocumentSnapshot saAdminSnapShot = await FirebaseFirestore.instance
         .collection(ProjectConstants.collectionsaAdmin)
         .doc(ProjectConstants.docsaAdminId)
@@ -100,6 +159,7 @@ class SaLoginController extends GetxController {
             behavior: SnackBarBehavior.floating,
           ),
         );
+
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('mobile', mobileNumber);
         await prefs.setString('password', password);
@@ -109,18 +169,10 @@ class SaLoginController extends GetxController {
 
         clearController(context);
         Get.offNamed(ProjectRouter.SA_HOME_SCREEN);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Invalid Credentials'),
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.blue,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        return false;
+        return true;
       }
     }
+    return false;
   }
 
   void clearController(BuildContext context) {

@@ -14,6 +14,8 @@ class SaPositionController extends GetxController {
   var isButtonClicked = false.obs; // Observable variable
   var isSaving = false.obs; // Flag to prevent duplicate calls
 
+  var positionButtonName = ''.obs;
+
   void toggleButton() {
     isButtonClicked.value = !isButtonClicked.value; // Toggle state
   }
@@ -37,10 +39,10 @@ class SaPositionController extends GetxController {
               .doc(selectedPosition.positionId);
 
           var updatedPosition = PositionModel(
-            positionId: selectedPosition.positionId,
-            positionName: positionNameController.text.trim(),
-            positionCreatedAt: DateTime.now(),
-          );
+              positionId: selectedPosition.positionId,
+              positionName: positionNameController.text.trim(),
+              positionCreatedAt: selectedPosition.positionCreatedAt,
+              positionUpdatedAt: DateTime.now());
 
           await docRef.update(updatedPosition.toMap());
 

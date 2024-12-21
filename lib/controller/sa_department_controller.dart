@@ -18,6 +18,8 @@ class SaDepartmentController extends GetxController {
     isButtonClicked.value = !isButtonClicked.value; // Toggle state
   }
 
+  var departmentButtonName = ''.obs;
+
   final departmentNameController = TextEditingController();
 
   // Updated saveOrUpdateDepartment method handling both add and update
@@ -37,10 +39,10 @@ class SaDepartmentController extends GetxController {
               .doc(selectedDepartment.deptId);
 
           var updatedDepartment = DepartmentModel(
-            deptId: selectedDepartment.deptId,
-            deptName: departmentNameController.text.trim(),
-            deptCreatedAt: DateTime.now(),
-          );
+              deptId: selectedDepartment.deptId,
+              deptName: departmentNameController.text.trim(),
+              deptCreatedAt: selectedDepartment.deptCreatedAt,
+              deptUpdatedAt: DateTime.now());
 
           await docRef.update(updatedDepartment.toMap());
 
@@ -69,12 +71,14 @@ class SaDepartmentController extends GetxController {
           var departmentData = DepartmentModel(
             deptId: deptId,
             deptName: departmentNameController.text.trim(),
-            deptCreatedAt:
-                currentDateTime, // Set the current date and time for creation
+            deptCreatedAt: currentDateTime,
+
             // Set the current date and time for creation
           );
 
           await docRef.set(departmentData.toMap());
+
+          print(departmentData.toString());
 
           // Show success message for adding a new department
           ScaffoldMessenger.of(context).showSnackBar(
@@ -120,7 +124,7 @@ class SaDepartmentController extends GetxController {
   }
 
   // Validation for department name
-  validateFields(BuildContext context) {
+  validateFields(BuildContext context) async {
     if (departmentNameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -136,7 +140,49 @@ class SaDepartmentController extends GetxController {
           behavior: SnackBarBehavior.floating));
       return false;
     }
+
+    // Check if the department name already exists
+    bool exists = await checkIfDeptNameExists(departmentNameController.text);
+
+    if (exists) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            'Department Name Already Exists',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.yellowAccent,
+          behavior: SnackBarBehavior.floating));
+
+      return false;
+    }
+
     return true;
+  }
+
+  // Function to check if the department name already exists in Firestore
+  Future<bool> checkIfDeptNameExists(String deptName) async {
+    try {
+      final snapshot = await firebaseFirestore
+          .collection(ProjectConstants.collectionDept)
+          .get();
+
+      // Compare case-insensitively
+      for (var doc in snapshot.docs) {
+        String existingDeptName = doc['deptName'];
+        if (existingDeptName.toLowerCase() == deptName.toLowerCase()) {
+          return true; // Match found
+        }
+      }
+      return false; // No match found
+    } catch (e) {
+      print("Error checking if department name exists: $e");
+      return false;
+    }
   }
 
   // Clears department name controller
@@ -151,12 +197,14 @@ class SaDepartmentController extends GetxController {
           .collection(ProjectConstants.collectionDept)
           .orderBy('deptCreatedAt', descending: true)
           .get();
+
+      // Ensure deptList is updated with the latest data
       deptList.value = snapshot.docs
           .map((doc) =>
               DepartmentModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print("unable to fetch the details");
+      print("Unable to fetch the details: $e");
     }
   }
 

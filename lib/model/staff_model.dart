@@ -6,10 +6,17 @@ class StaffModel {
   String staffJoiningDate;
   String staffMobileNumber;
   String staffPassword;
+  String deptId;
+  String deptName;
+  String positionId;
+  String positionName;
   String staffDob;
-  String staffMobileNumber2;
+  String staffMobileNumberTwo;
   String staffAddress;
   DateTime staffCreatedAt;
+  String? createdById;
+  String? createdByName;
+  DateTime? staffUpdatedAt;
 
   // Constructor
   StaffModel({
@@ -18,10 +25,17 @@ class StaffModel {
     required this.staffJoiningDate,
     required this.staffMobileNumber,
     required this.staffPassword,
+    required this.deptId,
+    required this.deptName,
+    required this.positionId,
+    required this.positionName,
     required this.staffDob,
-    required this.staffMobileNumber2,
+    required this.staffMobileNumberTwo,
     required this.staffAddress,
     required this.staffCreatedAt,
+    this.createdById,
+    this.createdByName,
+    this.staffUpdatedAt,
   });
 
   // Factory constructor to create an instance from a map
@@ -32,14 +46,20 @@ class StaffModel {
       staffJoiningDate: map['staffJoiningDate'],
       staffMobileNumber: map['staffMobileNumber'],
       staffPassword: map['staffPassword'],
+      deptId: map['deptId'],
+      deptName: map['deptName'],
+      positionId: map['positionId'],
+      positionName: map['positionName'],
       staffDob: map['staffDob'],
-      staffMobileNumber2: map['staffMobileNumber2'],
+      staffMobileNumberTwo: map['staffMobileNumberTwo'],
       staffAddress: map['staffAddress'],
       staffCreatedAt: (map['staffCreatedAt'] as Timestamp).toDate(),
+      createdById: map['createdById'],
+      createdByName: map['createdByName'],
     );
   }
 
-  // Method to convert an instance to a map
+  // Method to convert the instance to a map
   Map<String, dynamic> toMap() {
     return {
       'staffId': staffId,
@@ -47,10 +67,16 @@ class StaffModel {
       'staffJoiningDate': staffJoiningDate,
       'staffMobileNumber': staffMobileNumber,
       'staffPassword': staffPassword,
+      'deptId': deptId,
+      'deptName': deptName,
+      'positionId': positionId,
+      'positionName': positionName,
       'staffDob': staffDob,
-      'staffMobileNumber2': staffMobileNumber2,
+      'staffMobileNumberTwo': staffMobileNumberTwo,
       'staffAddress': staffAddress,
       'staffCreatedAt': Timestamp.fromDate(staffCreatedAt),
+      'createdById': createdById,
+      'createdByName': createdByName,
     };
   }
 
@@ -59,7 +85,8 @@ class StaffModel {
   String toString() {
     return 'StaffModel(staffId: $staffId, staffName: $staffName, staffJoiningDate: $staffJoiningDate, '
         'staffMobileNumber: $staffMobileNumber, staffPassword: $staffPassword, '
-        'staffDob: $staffDob, staffMobileNumber2: $staffMobileNumber2, staffAddress: $staffAddress, '
-        'staffCreatedAt: $staffCreatedAt)';
+        'deptId: $deptId, deptName: $deptName, positionId: $positionId, positionName: $positionName, '
+        'staffDob: $staffDob, staffMobileNumberTwo: $staffMobileNumberTwo, staffAddress: $staffAddress, '
+        'staffCreatedAt: $staffCreatedAt, createdById: $createdById, createdByName: $createdByName)';
   }
 }

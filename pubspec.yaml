@@ -42,6 +42,7 @@ dependencies:
   awesome_icons: ^1.1.0
   animated_search_bar: ^2.7.2
   intl:
+  dropdown_textfield: ^1.2.0
 
 dev_dependencies:
   flutter_test:

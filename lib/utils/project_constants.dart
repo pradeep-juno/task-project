@@ -13,13 +13,11 @@ class ProjectConstants {
   static const addEmployee = "Add Employee";
   static const addDepartment = "Add Department";
   static const addPosition = "Add Position";
-  static const name = "Name";
-  static const enterTheName = "Enter The Name";
+
   static const mobileNumber = "Mobile Number";
   static const department = "Department";
   static const chooseDepartment = "Choose Department";
-  static const dateOfJoin = "Date OF Join";
-  static const joiningDate = "Joining Date";
+
   static const position = "Position";
   static const choosePosition = "Chosse Position";
   static const next = "Next";
@@ -30,13 +28,11 @@ class ProjectConstants {
   static const createdTime = "Created Time";
   static const manage = "Manage";
 
-  static const dateOfBirth = "Date Of Birth";
-  static const enterDOB = "Enter DOB";
   static const update = "Update";
 
-  static const mobileNumber2 = "Mobile Number 2";
+  static const loginCredentials = "Login credentials";
 
-  static const enterAddress = "Enter ADDRESS";
+  static const mobileNumberTwo = "Mobile Number(Optional)";
 
   //department
   static const eventDepartment = "Event Department";
@@ -62,4 +58,26 @@ class ProjectConstants {
 
 //database/Doc
   static const docsaAdminId = "HPv46cOvtwpnnhJxAE7M";
+
+  //staff
+  static const employeeDetails = "Employee Details";
+  static const staffName = "Name";
+  static const staffEnterTheName = "Enter The Name";
+  static const staffDateOfJoin = "Date OF Join";
+  static const staffJoiningDate = "Joining Date";
+  static const staffMobileNumber = "Mobile Number";
+  static const staffMobileNumberTwo = "Mobile Number Two (optional)";
+  static const staffEnterMobileNumber = "Enter Mobile Number";
+  static const staffPassword = "Password";
+  static const staffEnterPassword = "Enter Password";
+  static const staffDepartment = "Department";
+  static const staffChooseDepartment = "Enter The Department";
+  static const staffPosition = "Department";
+  static const staffChoosePosition = "Enter The Department";
+  static const staffDateOfBirth = "Date Of Birth";
+  static const staffEnterDOB = "Enter DOB";
+  static const staffEnterAddress = "Enter ADDRESS";
+
+  static const employee = "Employee";
+  static const loginCrendentials = "Login Crendentials";
 }

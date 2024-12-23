@@ -13,7 +13,7 @@ class ProjectRouter {
     GetPage(
         name: SA_LOGIN_SCREEN,
         page: () => SaLoginScreen(),
-        transition: Transition.rightToLeftWithFade),
+        transition: Transition.downToUp),
 
     //SA_HOME_SCREEN
     GetPage(

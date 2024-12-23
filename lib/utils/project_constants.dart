@@ -13,6 +13,7 @@ class ProjectConstants {
   static const addEmployee = "Add Employee";
   static const addDepartment = "Add Department";
   static const addPosition = "Add Position";
+  static const logout = "Logout";
 
   static const mobileNumber = "Mobile Number";
   static const department = "Department";
@@ -33,6 +34,10 @@ class ProjectConstants {
   static const loginCredentials = "Login credentials";
 
   static const mobileNumberTwo = "Mobile Number(Optional)";
+
+  static const cancel = "Cancel";
+  static const yes = "Yes";
+  static const doYouWantToDelete = "Do you want to delete ?";
 
   //department
   static const eventDepartment = "Event Department";

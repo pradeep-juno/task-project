@@ -52,6 +52,8 @@ class SaStaffController extends GetxController {
       String id = prefs.getString('id') ?? 'Not Available';
 
       if (staffId != null) {
+        print("staff Update");
+
         var adminSnapshot = await firebaseFirestore
             .collection(ProjectConstants.collectionsaAdmin)
             .doc(id)
@@ -142,6 +144,11 @@ class SaStaffController extends GetxController {
           );
         }
       } else {
+        print("staff add");
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        String id = prefs.getString('id') ?? 'Not Available';
+
         var adminSnapshot = await firebaseFirestore
             .collection(ProjectConstants.collectionsaAdmin)
             .doc(id)

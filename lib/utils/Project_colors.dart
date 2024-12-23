@@ -29,4 +29,5 @@ class ProjectColors {
   static const Color green51ADAA = Color(0xFF51ADAA);
   static const Color greenLightD3E6E5 = Color(0xFFD3E6E5);
   static const Color grey = Color(0xFFAAAAAA);
+  static const Color orange = Color(0xFFEB3E31);
 }

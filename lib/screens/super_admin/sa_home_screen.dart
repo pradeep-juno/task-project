@@ -119,7 +119,9 @@ class _SaHomeScreenState extends State<SaHomeScreen> {
                     index: 2,
                     selectedIndex: selectedIndex,
                     onMenuItemTap: () => onMenuItemTap(2),
-                  )
+                  ),
+                  buildSizedBoxHeightFun(context, height: 40),
+                  buildLogoutButton(context)
                 ],
               ),
             ),

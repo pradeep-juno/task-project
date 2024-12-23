@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:jk_event_management/router/project_router.dart';
 import 'package:jk_event_management/utils/project_constants.dart';
 
 import '../controller/sa_department_controller.dart';
@@ -112,10 +113,15 @@ buildTextFun(BuildContext context,
     required double fontsize,
     required FontWeight fontweight,
     required Color color,
-    int maxLines = 1}) {
+    int maxLines = 1,
+    String? fontFamily}) {
   return Text(
     title,
-    style: TextStyle(fontSize: fontsize, fontWeight: fontweight, color: color),
+    style: TextStyle(
+        fontSize: fontsize,
+        fontWeight: fontweight,
+        color: color,
+        fontFamily: 'poppins'),
     maxLines: maxLines, // Limits the number of lines to display
     overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
   );
@@ -1080,13 +1086,11 @@ buildDepartmentUiFunTwo(
                                   selectedDepartment = department;
                                 },
                               ),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () {
-                                  saDepartmentController.deleteDepartmentData(
-                                      context, department.deptId);
-                                },
-                              ),
+                              buildDeleteContainerFun(
+                                  context,
+                                  saDepartmentController,
+                                  department,
+                                  'department')
                             ],
                           ),
                         ),
@@ -1324,13 +1328,8 @@ buildPositionUIFunTwo(
                                   selectedPosition = position;
                                 },
                               ),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () {
-                                  saPositionController.deletePositionData(
-                                      context, position.positionId);
-                                },
-                              ),
+                              buildDeleteContainerFun(context,
+                                  saPositionController, position, 'position')
                             ],
                           ),
                         ),
@@ -1687,11 +1686,14 @@ buildStaffDetailsUiFun(
               onPressed: () {
                 print("Done Presses");
                 print("staffId23 : ${saStaffController.staffId}");
-                if (saStaffController.staffId != null) {
+
+                if (saStaffController.staffId.value.isEmpty) {
+                  print("add");
+                  saStaffController.saveStaffData(context, null);
+                } else {
+                  print("update");
                   saStaffController.saveStaffData(
                       context, saStaffController.staffId.toString());
-                } else {
-                  saStaffController.saveStaffData(context, null);
                 }
               },
             ),
@@ -1853,6 +1855,7 @@ buildStaffDetailsUiFunTwo(
                                     staffController.buttonName.value =
                                         ProjectConstants.update;
 
+                                    print("staffID : ${staff.staffId}");
                                     staffController.staffId.value =
                                         staff.staffId;
 
@@ -1882,13 +1885,8 @@ buildStaffDetailsUiFunTwo(
                                     staffController.toggleButton();
                                   },
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    staffController.deleteStaffData(
-                                        context, staff.staffId);
-                                  },
-                                ),
+                                buildDeleteContainerFun(
+                                    context, staffController, staff, "staff")
                               ],
                             ),
                           ),
@@ -1907,6 +1905,96 @@ buildStaffDetailsUiFunTwo(
   ));
 }
 
+Widget buildDeleteContainerFun(
+  BuildContext context,
+  dynamic
+      controller, // The controller (staffController, saPositionController, or saDepartmentController)
+  dynamic item, // The staff, position, or department object
+  String type,
+) {
+  return IconButton(
+    icon: Icon(Icons.delete, color: Colors.red),
+    onPressed: () {
+      Get.dialog(
+        AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildTextFun(
+                context,
+                title: ProjectConstants.doYouWantToDelete,
+                fontsize: 14,
+                fontFamily: 'Poppins',
+                fontweight: FontWeight.w500,
+                color: ProjectColors.blackColor575757,
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Cancel Button
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      side: BorderSide(color: Colors.red),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.back(); // Close the dialog
+                    },
+                    child: buildTextFun(
+                      context,
+                      title: ProjectConstants.cancel,
+                      fontsize: 12,
+                      fontweight: FontWeight.w800,
+                      fontFamily: 'Poppins',
+                      color: ProjectColors.orange,
+                    ),
+                  ),
+                  // Delete Button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.back(); // Close the dialog
+                      if (type == "staff") {
+                        // Call deleteStaffData for staff
+                        controller.deleteStaffData(context, item.staffId);
+                      } else if (type == "position") {
+                        // Call deletePositionData for position
+                        controller.deletePositionData(context, item.positionId);
+                      } else if (type == "department") {
+                        // Call deleteDepartmentData for department
+                        controller.deleteDepartmentData(context, item.deptId);
+                      }
+                    },
+                    child: buildTextFun(
+                      context,
+                      title: ProjectConstants.yes,
+                      fontsize: 12,
+                      fontweight: FontWeight.w800,
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 //---------------------------Scaffold MessageFun--------------------------
 
 void buildScaffoldMessage(BuildContext context, String message) {
@@ -1922,4 +2010,92 @@ void buildScaffoldMessage(BuildContext context, String message) {
       duration: Duration(seconds: 2),
       backgroundColor: Colors.yellowAccent,
       behavior: SnackBarBehavior.floating));
+}
+
+//--------------------------------Logout Container---------------------------
+
+Widget buildLogoutButton(BuildContext context) {
+  return InkWell(
+    onTap: () {
+      Get.dialog(
+        AlertDialog(
+          contentPadding: EdgeInsets.all(20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Center(
+            child: Text(
+              'Want to Logout?',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Tick Icon Container for confirming logout
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: ProjectColors
+                        .primaryGreen, // Border color for tick icon
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.check),
+                  color: ProjectColors.primaryGreen,
+                  onPressed: () {
+                    Get.offNamed(
+                      ProjectRouter.SA_LOGIN_SCREEN,
+                    );
+                  },
+                ),
+              ),
+              SizedBox(width: 20), // Space between icons
+
+              Container(
+                decoration: BoxDecoration(
+                  color: ProjectColors
+                      .primaryGreen, // Background color for close icon
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.close),
+                  color: Colors.white,
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.logout, // Logout icon
+            color: ProjectColors.primaryGreen,
+          ),
+          SizedBox(width: 10), // Add space between icon and text
+          Text(
+            'Logout',
+            style: TextStyle(
+              color: ProjectColors.primaryGreen,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

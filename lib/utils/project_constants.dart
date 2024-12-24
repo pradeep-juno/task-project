@@ -14,6 +14,10 @@ class ProjectConstants {
   static const addDepartment = "Add Department";
   static const addPosition = "Add Position";
   static const logout = "Logout";
+  static const salary = "Salary";
+  static const enterTheSalary = "Enter The Salary";
+  static const location = "Location";
+  static const enterTheLocation = "Enter The Locaion";
 
   static const mobileNumber = "Mobile Number";
   static const department = "Department";
@@ -85,4 +89,16 @@ class ProjectConstants {
 
   static const employee = "Employee";
   static const loginCrendentials = "Login Crendentials";
+
+  static const String idKey = 'id';
+  static const String notAvailable = 'Not Available';
+  static const String deptName = 'deptName';
+  static const String positionName = 'positionName';
+
+  static const String departmentCollection = 'department';
+  static const String positionCollection = 'position';
+  static const String staffCollection = 'staff';
+
+  static const String searchHint = 'Search';
+  static const String noResultsFound = 'No Results Found';
 }

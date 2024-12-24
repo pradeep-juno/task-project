@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:jk_event_management/utils/functions.dart';
 
 import '../model/position_model.dart';
 import '../utils/project_constants.dart';
@@ -10,6 +11,32 @@ class SaPositionController extends GetxController {
   RxList<PositionModel> positionList = <PositionModel>[].obs;
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  final searchNameController = TextEditingController();
+  var filteredSearchList = <PositionModel>[].obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    filteredSearchList.value = positionList;
+    searchNameController.addListener(() {
+      filterPositionName();
+    });
+  }
+
+  void filterPositionName() {
+    String query = searchNameController.text.toLowerCase();
+
+    if (query.isEmpty) {
+      filteredSearchList.value = positionList;
+    } else {
+      filteredSearchList.value = positionList
+          .where((positionName) =>
+              positionName.positionName.toLowerCase().startsWith(query))
+          .toList();
+    }
+  }
 
   var isButtonClicked = false.obs; // Observable variable
   var isSaving = false.obs; // Flag to prevent duplicate calls
@@ -170,5 +197,6 @@ class SaPositionController extends GetxController {
         .delete();
 
     fetchPosition();
+    buildScaffoldMessage(context, "Position Deleted Successfully");
   }
 }

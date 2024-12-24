@@ -250,10 +250,11 @@ Widget buildTextFormFieldFunTwo(
   TextEditingController? controller,
   bool isSmallSize = true,
   required double fontSize,
-  bool dropdown = false, // Add the dropdown boolean parameter
-  List<String>? dropdownItems, // Add the dropdown items parameter
-  String? selectedValue, // Add selected value parameter
-  Function(String?)? onChanged, // Add onChanged callback for dropdown
+  bool dropdown = false,
+  List<String>? dropdownItems,
+  String? selectedValue,
+  Function(String?)? onChanged,
+  bool prefixIcon = false,
 }) {
   if (dropdown) {
     return Container(
@@ -275,7 +276,8 @@ Widget buildTextFormFieldFunTwo(
           ),
           onChanged: onChanged,
           isExpanded: true,
-          underline: SizedBox(), // This removes the underline
+          underline: SizedBox(),
+          // This removes the underline
           items: dropdownItems?.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -303,13 +305,21 @@ Widget buildTextFormFieldFunTwo(
         controller: controller,
         decoration: InputDecoration(
           hintText: hint,
-          border: InputBorder.none, // Removes the bottom border line
+          border: InputBorder.none,
+          // Removes the bottom border line
           hintStyle: TextStyle(
               fontSize: fontSize,
-              color: ProjectColors.blackColor191919
-                  .withOpacity(0.6)), // Set the font size here
+              color: ProjectColors.blackColor191919.withOpacity(0.6)),
+          // Set the font size here
           contentPadding:
               EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+          prefixIcon: prefixIcon
+              ? Icon(
+                  Icons.currency_rupee,
+                  size: fontSize + 4, // Adjust size as needed
+                  color: ProjectColors.blackColor191919.withOpacity(0.6),
+                )
+              : null, // Show the prefix icon if prefixIcon is true
         ),
       ),
     );
@@ -326,6 +336,7 @@ Widget buildTextFormFieldFunThree(
   TextInputType? keyboardType,
   List<TextInputFormatter>? inputFormatters,
   bool isPassword = false,
+  bool prefixIcon = false,
 }) {
   bool obscureText = isPassword; // Initialize obscureText here
 
@@ -342,7 +353,8 @@ Widget buildTextFormFieldFunThree(
           controller: controller,
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
-          obscureText: isPassword ? obscureText : false, // Toggle obscureText
+          obscureText: isPassword ? obscureText : false,
+          // Toggle obscureText
           decoration: InputDecoration(
             hintText: hint,
             border: InputBorder.none,
@@ -362,6 +374,13 @@ Widget buildTextFormFieldFunThree(
                         obscureText = !obscureText; // Toggle the state
                       });
                     },
+                  )
+                : null,
+            prefixIcon: prefixIcon
+                ? Icon(
+                    Icons.currency_rupee,
+                    size: fontSize + 4, // Adjust size as needed
+                    color: ProjectColors.blackColor191919.withOpacity(0.6),
                   )
                 : null,
           ),
@@ -462,403 +481,6 @@ Widget buildDatePickerField(
     },
   );
 }
-
-// Employee Content
-// Widget buildEmployeeContent(BuildContext context,
-//     SaStaffController staffController, StaffModel? selectedStaff) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.name,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunTwo(
-//                   context,
-//                   hint: ProjectConstants.enterTheName,
-//                   fontSize: 10,
-//                   controller: staffController.staffNameController,
-//                 ),
-//               ],
-//             ),
-//           ),
-//           SizedBox(width: 16), // Spacing between fields
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.dateOfJoin,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildDatePickerField(context,
-//                     hint: ProjectConstants.joiningDate,
-//                     fontSize: 10,
-//                     controller: staffController.staffJoiningDateController)
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       SizedBox(height: 16), // Spacing between rows
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.mobileNumber,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunThree(context,
-//                     hint: ProjectConstants.enterMobileNumber,
-//                     fontSize: 10,
-//                     controller: staffController.staffMobileNumberController,
-//                     inputFormatters: [
-//                       FilteringTextInputFormatter.digitsOnly,
-//                       LengthLimitingTextInputFormatter(10)
-//                     ])
-//               ],
-//             ),
-//           ),
-//           SizedBox(width: 16), // Spacing between fields
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.password,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunThree(context,
-//                     hint: ProjectConstants.enterPassword,
-//                     fontSize: 10,
-//                     controller: staffController.staffPasswordController,
-//                     isPassword: true,
-//                     keyboardType: TextInputType.text,
-//                     inputFormatters: [LengthLimitingTextInputFormatter(8)])
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       SizedBox(height: 16), // Spacing between rows
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.department,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunTwo(
-//                   context,
-//                   hint: ProjectConstants.selectTheDepartment,
-//                   fontSize: 10,
-//                   dropdown: true,
-//                   selectedValue:
-//                       staffController.selectedDepartment.value.isEmpty
-//                           ? ProjectConstants.selectTheDepartment
-//                           : staffController.selectedDepartment.value,
-//                   // Show selected department after selection
-//                   dropdownItems: staffController.departmentList,
-//                   // Populate dropdown
-//                   onChanged: (value) {
-//                     staffController.selectedDepartment.value =
-//                         value ?? ''; // Update selected department
-//                   },
-//                 )
-//               ],
-//             ),
-//           ),
-//           SizedBox(width: 16), // Spacing between fields
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.position,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunTwo(
-//                   context,
-//                   hint: ProjectConstants.selectThePosition,
-//                   // Default hint shown initially
-//                   fontSize: 10,
-//                   dropdown: true,
-//
-//                   selectedValue:
-//                       staffController.selectedPosition.value.isNotEmpty
-//                           ? staffController.selectedPosition.value
-//                           : null,
-//                   // Default to null if no value is selected
-//                   dropdownItems: staffController.positionList,
-//                   onChanged: (value) {
-//                     // Ensure the default hint is not selectable
-//                     if (value != ProjectConstants.selectThePosition) {
-//                       staffController.selectedPosition.value = value ?? '';
-//                     }
-//                   },
-//                 )
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       buildSizedBoxHeightFun(context, height: 24),
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           buildContainerButtonFun(
-//             context,
-//             ProjectConstants.clear,
-//             isBordered: true,
-//             borderColor: ProjectColors.blackColor575757,
-//             onPressed: () {},
-//             isSmallSize: true,
-//             showIcon: false, // No icon for "Clear" button
-//           ),
-//           buildContainerButtonFun(
-//             context,
-//             ProjectConstants.next,
-//
-//             color: ProjectColors.accentPink,
-//             onPressed: () {
-//               staffController.EmployeeDetails(context, selectedStaff);
-//               //staffController.activeTab.value = 'Personal Details';
-//             },
-//             isSmallSize: true,
-//             showIcon: false, // No icon for "Clear" button
-//           ),
-//           // Spacing between buttons
-//         ],
-//       ),
-//     ],
-//   );
-// }
-
-// buildStaffUiFun(
-//   BuildContext context,
-//   StaffModel? selectedStaff,
-//   SaStaffController staffController,
-// ) {
-//   return Container(
-//     height: 370,
-//     width: 560,
-//     decoration: BoxDecoration(
-//       color: ProjectColors.whiteColor,
-//       borderRadius: BorderRadius.circular(10),
-//       border: Border.all(color: Colors.grey[200]!),
-//       boxShadow: [
-//         BoxShadow(
-//           color: Colors.black.withOpacity(0.1),
-//           blurRadius: 5,
-//           offset: Offset(0, 2),
-//         ),
-//       ],
-//     ),
-//     child: Padding(
-//       padding: const EdgeInsets.all(25.0),
-//       child: Column(
-//         children: [
-//           // Tab Navigation
-//           Obx(
-//             () => Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 GestureDetector(
-//                   onTap: () => staffController.activeTab.value = 'Employee',
-//                   child: Text(
-//                     "Employee",
-//                     style: TextStyle(
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.w500,
-//                       color: staffController.activeTab.value == 'Employee'
-//                           ? ProjectColors.accentPink
-//                           : ProjectColors.blackColor575757,
-//                       decoration: staffController.activeTab.value == 'Employee'
-//                           ? TextDecoration.underline
-//                           : null,
-//                     ),
-//                   ),
-//                 ),
-//                 GestureDetector(
-//                   // onTap: () => staffController
-//                   //     .activeTab.value = 'Personal Details',
-//                   child: Text(
-//                     "Personal Details",
-//                     style: TextStyle(
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.w500,
-//                       color:
-//                           staffController.activeTab.value == 'Personal Details'
-//                               ? ProjectColors.accentPink
-//                               : ProjectColors.blackColor575757,
-//                       decoration:
-//                           staffController.activeTab.value == 'Personal Details'
-//                               ? TextDecoration.underline
-//                               : null,
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           buildSizedBoxHeightFun(context, height: 20),
-//
-//           // Tab Content
-//           Expanded(
-//             child: Obx(
-//               () => staffController.activeTab.value == 'Employee'
-//                   ? buildEmployeeContent(
-//                       context, staffController, selectedStaff)
-//                   : buildPersonalDetailsContent(
-//                       context, staffController, selectedStaff),
-//             ),
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
-
-// Personal Details Content
-// Widget buildPersonalDetailsContent(BuildContext context,
-//     SaStaffController staffController, StaffModel? selectedStaff) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.dateOfBirth,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildDatePickerField(context,
-//                     hint: ProjectConstants.enterDOB,
-//                     fontSize: 10,
-//                     controller: staffController.staffDateOfBirthController)
-//               ],
-//             ),
-//           ),
-//           SizedBox(width: 16), // Spacing between fields
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.mobileNumberTwo,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunThree(context,
-//                     hint: ProjectConstants.enterMobileNumber,
-//                     fontSize: 10,
-//                     controller: staffController.staffMobileNumber2Controller,
-//                     inputFormatters: [
-//                       FilteringTextInputFormatter.digitsOnly,
-//                       LengthLimitingTextInputFormatter(10)
-//                     ])
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       SizedBox(height: 16), // Spacing between rows
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 buildTextFun(context,
-//                     title: ProjectConstants.enterAddress,
-//                     fontsize: 12,
-//                     fontweight: FontWeight.w500,
-//                     color: ProjectColors.blackColor575757),
-//                 buildTextFormFieldFunTwo(
-//                   context,
-//                   isSmallSize: false,
-//                   hint: ProjectConstants.enterAddress,
-//                   fontSize: 10,
-//                   controller: staffController.staffAddressController,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//       buildSizedBoxHeightFun(context, height: 24),
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           buildContainerButtonFun(
-//             context,
-//             "Clear",
-//             isBordered: true,
-//             borderColor: ProjectColors.blackColor575757,
-//             onPressed: () {},
-//             isSmallSize: true,
-//             showIcon: false, // No icon for "Clear" button
-//           ),
-//           buildContainerButtonFun(
-//             context,
-//
-//             staffController.staffButtonName.value,
-//
-//             color: ProjectColors.accentPink,
-//             onPressed: () async => {
-//               if (staffController.staffId != null)
-//                 {
-//                   print("updateTrue"),
-//                   await staffController.saveOrUpdateStaff(
-//                       context, staffController.staffId.value, staffController)
-//                 }
-//               else
-//                 {
-//                   print("addTrue"),
-//                   await staffController.saveOrUpdateStaff(
-//                       context, null, staffController)
-//                 },
-//               staffController.fetchStaff(),
-//             },
-//
-//             isSmallSize: true,
-//             showIcon: false, // No icon for "Clear" button
-//           ),
-//           // Spacing between buttons
-//         ],
-//       ),
-//     ],
-//   );
-// }
-//
 
 //---------------------------------Department-------------------------------------------------
 
@@ -1007,12 +629,21 @@ buildDepartmentUiFunTwo(
           ),
         ),
         const SizedBox(height: 10),
+        if (saDepartmentController.filteredSearchList.isEmpty)
+          Center(
+            child: buildTextFun(context,
+                title: "NO DATA",
+                fontsize: 30,
+                fontweight: FontWeight.bold,
+                color: Colors.red),
+          ),
         Expanded(
           child: Obx(
             () => ListView.builder(
-              itemCount: saDepartmentController.deptList.length,
+              itemCount: saDepartmentController.filteredSearchList.length,
               itemBuilder: (context, index) {
-                final department = saDepartmentController.deptList[index];
+                final department =
+                    saDepartmentController.filteredSearchList[index];
                 return Container(
                   height: 56,
                   width: double.infinity,
@@ -1251,12 +882,20 @@ buildPositionUIFunTwo(
           ),
         ),
         const SizedBox(height: 10),
+        if (saPositionController.filteredSearchList.isEmpty)
+          Center(
+            child: buildTextFun(context,
+                title: "NO DATA",
+                fontsize: 30,
+                fontweight: FontWeight.bold,
+                color: Colors.red),
+          ),
         Expanded(
           child: Obx(
             () => ListView.builder(
-              itemCount: saPositionController.positionList.length,
+              itemCount: saPositionController.filteredSearchList.length,
               itemBuilder: (context, index) {
-                final position = saPositionController.positionList[index];
+                final position = saPositionController.filteredSearchList[index];
                 return Container(
                   height: 56,
                   width: double.infinity,
@@ -1649,6 +1288,50 @@ buildStaffDetailsUiFun(
                     ),
                     buildSizedBoxHeightFun(context, height: 16),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              buildTextFun(context,
+                                  title: ProjectConstants.salary,
+                                  fontsize: 12,
+                                  fontweight: FontWeight.w500,
+                                  color: ProjectColors.blackColor575757),
+                              buildTextFormFieldFunThree(context,
+                                  hint: ProjectConstants.enterTheSalary,
+                                  fontSize: 10,
+                                  controller:
+                                      saStaffController.staffSalaryController,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  prefixIcon: true),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              buildTextFun(context,
+                                  title: ProjectConstants.location,
+                                  fontsize: 12,
+                                  fontweight: FontWeight.w500,
+                                  color: ProjectColors.blackColor191919),
+                              buildTextFormFieldFunTwo(context,
+                                  hint: ProjectConstants.enterTheLocation,
+                                  fontSize: 10,
+                                  controller: saStaffController
+                                      .staffLocationController),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    buildSizedBoxHeightFun(context, height: 16),
+                    Row(
                       children: [
                         Expanded(
                           child: Column(
@@ -1767,12 +1450,21 @@ buildStaffDetailsUiFunTwo(
         ),
       ),
       buildSizedBoxHeightFun(context, height: 10),
+      if (staffController.filteredSearchList.isEmpty)
+        Center(
+          child: buildTextFun(context,
+              title: "NO DATA",
+              fontsize: 30,
+              fontweight: FontWeight.bold,
+              color: Colors.red),
+        ),
       Expanded(
         child: Obx(
           () => ListView.builder(
-            itemCount: staffController.staffList.length,
+            itemCount: staffController.filteredSearchList.length,
             itemBuilder: (context, index) {
-              final staff = staffController.staffList[index];
+              final staff = staffController.filteredSearchList[index];
+
               return Column(
                 children: [
                   Container(
@@ -1879,6 +1571,10 @@ buildStaffDetailsUiFunTwo(
                                     staffController
                                         .staffMobileNumberTwoController
                                         .text = staff.staffMobileNumberTwo;
+                                    staffController.staffSalaryController.text =
+                                        staff.staffSalary;
+                                    staffController.staffLocationController
+                                        .text = staff.staffLocation;
                                     staffController.staffAddressController
                                         .text = staff.staffAddress;
 
@@ -1907,8 +1603,8 @@ buildStaffDetailsUiFunTwo(
 
 Widget buildDeleteContainerFun(
   BuildContext context,
-  dynamic
-      controller, // The controller (staffController, saPositionController, or saDepartmentController)
+  dynamic controller,
+  // The controller (staffController, saPositionController, or saDepartmentController)
   dynamic item, // The staff, position, or department object
   String type,
 ) {
@@ -2052,9 +1748,11 @@ Widget buildLogoutButton(BuildContext context) {
                     Get.offNamed(
                       ProjectRouter.SA_LOGIN_SCREEN,
                     );
+                    buildScaffoldMessage(context, "Logged Out Successfully");
                   },
                 ),
               ),
+
               SizedBox(width: 20), // Space between icons
 
               Container(

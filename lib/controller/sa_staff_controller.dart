@@ -25,6 +25,43 @@ class SaStaffController extends GetxController {
   RxString selectedDepartment = ''.obs; // fetch the dept data
   RxString selectedPosition = ''.obs; //fetch the position data
 
+  final searchNameController = TextEditingController();
+
+  var filteredSearchList = <StaffModel>[].obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+
+    filteredSearchList.value = staffList;
+
+    searchNameController.addListener(() {
+      filterStaffName();
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchNameController.clear();
+  }
+
+  void filterStaffName() {
+    String query = searchNameController.text.toLowerCase();
+
+    if (query.isEmpty) {
+      filteredSearchList.value = staffList;
+    } else {
+      filteredSearchList.value = staffList
+          .where((staffName) =>
+              staffName.staffName.toLowerCase().startsWith(query) ||
+              staffName.staffLocation.toLowerCase().startsWith(query))
+          .toList();
+    }
+  }
+
   void toggleButton() {
     isButtonClicked.value =
         !isButtonClicked.value; // call for all button operations
@@ -37,6 +74,8 @@ class SaStaffController extends GetxController {
   final staffDateOfBirthController = TextEditingController();
   final staffMobileNumberTwoController = TextEditingController();
   final staffAddressController = TextEditingController();
+  final staffSalaryController = TextEditingController();
+  final staffLocationController = TextEditingController();
 
   // After clicking done in staff screen this method do all validations to do ADD & UPDATE
 
@@ -102,18 +141,18 @@ class SaStaffController extends GetxController {
             staffJoiningDate: staffDateOfJoiningController.text.trim(),
             staffMobileNumber: staffMobileNumberController.text.trim(),
             staffPassword: staffPasswordController.text.trim(),
-
             deptId: departmentId,
             deptName: selectedDepartment.value,
             positionId: positionId,
             positionName: selectedPosition.value,
-
             staffDob: staffDateOfBirthController.text.trim(),
             staffMobileNumberTwo: staffMobileNumberTwoController.text.trim(),
+            staffSalary: staffSalaryController.text.trim(),
+            staffLocation: staffLocationController.text.trim(),
             staffAddress: staffAddressController.text.trim(),
             staffCreatedAt: DateTime.parse(currentDateTime.value),
-            createdByName: saAdminName, // Assign the admin name here
-            createdById: saAdminId, // Assign the admin ID here
+            createdByName: saAdminName,
+            createdById: saAdminId,
           );
 
           // Step 9: Save Staff Data to Firestore
@@ -198,18 +237,18 @@ class SaStaffController extends GetxController {
             staffJoiningDate: staffDateOfJoiningController.text.trim(),
             staffMobileNumber: staffMobileNumberController.text.trim(),
             staffPassword: staffPasswordController.text.trim(),
-
             deptId: departmentId,
             deptName: selectedDepartment.value,
             positionId: positionId,
             positionName: selectedPosition.value,
-
             staffDob: staffDateOfBirthController.text.trim(),
             staffMobileNumberTwo: staffMobileNumberTwoController.text.trim(),
+            staffSalary: staffSalaryController.text.trim(),
+            staffLocation: staffLocationController.text.trim(),
             staffAddress: staffAddressController.text.trim(),
             staffCreatedAt: currentDateTime,
-            createdByName: saAdminName, // Assign the admin name here
-            createdById: saAdminId, // Assign the admin ID here
+            createdByName: saAdminName,
+            createdById: saAdminId,
           );
 
           // Step 9: Save Staff Data to Firestore
@@ -255,6 +294,8 @@ class SaStaffController extends GetxController {
 
     String staffDob = staffDateOfBirthController.text.trim();
     String staffMobileNumberTwo = staffMobileNumberTwoController.text.trim();
+    String staffSalary = staffSalaryController.text.trim();
+    String staffLocation = staffLocationController.text.trim();
     String staffAddress = staffAddressController.text.trim();
 
     if (staffName.isEmpty) {
@@ -309,6 +350,15 @@ class SaStaffController extends GetxController {
           context, "Invalid mobile number, must be at least 10 digits");
       return false;
     }
+    if (staffSalary.isEmpty) {
+      buildScaffoldMessage(context, "Please Enter The Salary Amount");
+      return false;
+    }
+    if (staffLocation.isEmpty) {
+      buildScaffoldMessage(context, "Please Enter Location");
+      return false;
+    }
+
     if (staffAddress.isEmpty) {
       buildScaffoldMessage(context, "Please Enter Address");
       return false;
@@ -393,6 +443,9 @@ class SaStaffController extends GetxController {
     staffPasswordController.clear();
     staffDateOfBirthController.clear();
     staffMobileNumberTwoController.clear();
+    staffSalaryController.clear();
+    staffLocationController.clear();
+
     staffAddressController.clear();
 
     //after clear ,drop down data must be null
@@ -408,5 +461,7 @@ class SaStaffController extends GetxController {
         .delete();
 
     fetchStaff();
+
+    buildScaffoldMessage(context, "Staff Deleted Successfully");
   }
 }

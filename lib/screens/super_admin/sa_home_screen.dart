@@ -1,8 +1,8 @@
 import 'package:awesome_icons/awesome_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:jk_event_management/controller/sa_login_controller.dart';
+import 'package:jk_event_management/controller/sa_staff_controller.dart';
 import 'package:jk_event_management/screens/super_admin/sa_department_screen.dart';
 import 'package:jk_event_management/screens/super_admin/sa_position_screen.dart';
 import 'package:jk_event_management/screens/super_admin/sa_staff_screen.dart';
@@ -20,21 +20,18 @@ class SaHomeScreen extends StatefulWidget {
 
 class _SaHomeScreenState extends State<SaHomeScreen> {
   final SaLoginController saLoginController = Get.put(SaLoginController());
+  final SaStaffController saStaffController = Get.put(SaStaffController());
+
   int selectedIndex = 2;
-  String initials = "--";
 
   @override
   void initState() {
     super.initState();
-    _loadCustomerData();
-    saLoginController.saAdminName.listen((name) {
-      setState(() {
-        initials = name.isNotEmpty ? name.substring(0, 2).toUpperCase() : "--";
-      });
-    });
+    loadCustomerData();
+    saLoginController.saAdminName.listen((name) {});
   }
 
-  Future<void> _loadCustomerData() async {
+  Future<void> loadCustomerData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String id = '';
@@ -58,8 +55,6 @@ class _SaHomeScreenState extends State<SaHomeScreen> {
       selectedIndex = index;
     });
   }
-
-  String formattedDate = DateFormat("dd MMMM yyyy").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -127,134 +122,7 @@ class _SaHomeScreenState extends State<SaHomeScreen> {
             ),
           ),
           buildSizedBoxWidthFun(context, width: 4),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 75,
-                  width: MediaQuery.of(context).size.width * 0.76,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    color: const Color(0xFF17817D).withOpacity(0.1),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: [
-                        // Search bar
-                        Expanded(
-                          child: Container(
-                            height: 40,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: const Color(
-                                  0xFFD3E6E5), // Light greenish background
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color:
-                                      const Color(0xFF17817D)), // Border color
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    style: const TextStyle(
-                                        color: Color(0xFF17817D)),
-                                    decoration: const InputDecoration(
-                                      hintText: "Search",
-                                      hintStyle: TextStyle(
-                                          color: Color(
-                                              0xFF17817D)), // Hint text color
-                                      border: InputBorder.none,
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter a search term'; // Example validation
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(Icons.search,
-                                      color: Color(0xFF17817D)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-
-                        // Date display
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: ProjectColors.primaryGreen.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.calendar_today,
-                                  color: Color(0xFF17817D)),
-                              const SizedBox(width: 8),
-                              Text(
-                                formattedDate, // Dynamic date
-                                style: const TextStyle(
-                                  color: Color(0xFF17817D),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-
-                        // Notification icon
-                        const Icon(Icons.notifications,
-                            color: Color(0xFF17817D)),
-                        const SizedBox(width: 8),
-                        const VerticalDivider(
-                          color: Color(0xFF17817D),
-                          thickness: 2,
-                          indent: 22,
-                          endIndent: 22,
-                        ),
-                        const SizedBox(width: 8),
-
-                        // Profile
-                        Row(
-                          children: [
-                            buildCircleAvatarFunTwo(
-                                radius: 18,
-                                text: initials,
-                                backgroundColor: ProjectColors.primaryGreen,
-                                color: Colors.white,
-                                fontweight: FontWeight.bold),
-                            const SizedBox(width: 8),
-                            buildTextFun(
-                              context,
-                              title: "${saLoginController.saAdminName.value}",
-                              fontsize: 18,
-                              fontweight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(child: screens[selectedIndex]),
-              ],
-            ),
-          ),
+          Expanded(child: screens[selectedIndex]),
         ],
       ),
     );

@@ -12,6 +12,8 @@ class StaffModel {
   String positionName;
   String staffDob;
   String staffMobileNumberTwo;
+  String staffSalary;
+  String staffLocation;
   String staffAddress;
   DateTime staffCreatedAt;
   String? createdById;
@@ -31,6 +33,8 @@ class StaffModel {
     required this.positionName,
     required this.staffDob,
     required this.staffMobileNumberTwo,
+    required this.staffSalary,
+    required this.staffLocation,
     required this.staffAddress,
     required this.staffCreatedAt,
     this.createdById,
@@ -52,6 +56,8 @@ class StaffModel {
       positionName: map['positionName'],
       staffDob: map['staffDob'],
       staffMobileNumberTwo: map['staffMobileNumberTwo'],
+      staffSalary: map['staffSalary'],
+      staffLocation: map['staffLocation'],
       staffAddress: map['staffAddress'],
       staffCreatedAt: (map['staffCreatedAt'] as Timestamp).toDate(),
       createdById: map['createdById'],
@@ -73,6 +79,8 @@ class StaffModel {
       'positionName': positionName,
       'staffDob': staffDob,
       'staffMobileNumberTwo': staffMobileNumberTwo,
+      'staffSalary': staffSalary,
+      'staffLocation': staffLocation,
       'staffAddress': staffAddress,
       'staffCreatedAt': Timestamp.fromDate(staffCreatedAt),
       'createdById': createdById,
@@ -86,7 +94,8 @@ class StaffModel {
     return 'StaffModel(staffId: $staffId, staffName: $staffName, staffJoiningDate: $staffJoiningDate, '
         'staffMobileNumber: $staffMobileNumber, staffPassword: $staffPassword, '
         'deptId: $deptId, deptName: $deptName, positionId: $positionId, positionName: $positionName, '
-        'staffDob: $staffDob, staffMobileNumberTwo: $staffMobileNumberTwo, staffAddress: $staffAddress, '
+        'staffDob: $staffDob, staffMobileNumberTwo: $staffMobileNumberTwo,staffSalary:$staffSalary ,staffLocation:$staffLocation,'
+        'staffAddress: $staffAddress, '
         'staffCreatedAt: $staffCreatedAt, createdById: $createdById, createdByName: $createdByName)';
   }
 }
